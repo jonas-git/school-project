@@ -29,8 +29,6 @@ function lerp(value1, value2, amount) {
  *    - container: A DIV element in which the wheel canvas should be put.
  *                   If not supplied, a new element will be created.
  *    - onSteer:   A function that is called when the wheel is steered.
- *    - radius:    The radius of the wheel to determine where clicking is allowed.
- *                   If not supplied, the whole page can be clicked/tapped to steer.
  */
 function Wheel(imageSource, axisX, axisY, options) {
 	const self = this;
@@ -51,6 +49,7 @@ function Wheel(imageSource, axisX, axisY, options) {
 	image.onload = function () {
 		const context = canvas.getContext('2d');
 		context.drawImage(this, 0, 0, this.width, this.height);
+		self.imageCanvasRatio = this.height / canvas.height;
 	};
 
 	container.appendChild(canvas);
@@ -92,10 +91,14 @@ Wheel.prototype.onSteer = function (callback) {
 	this.onSteerFunc = callback;
 };
 
-Wheel.prototype.steer = function (angle) {
-	this.canvas.style.transform = 'rotate(' + angle + 'deg)';
+Wheel.prototype.steer = function (angle, raiseEvent) {
+	this.canvas.style['transform'] = 'rotate(' + angle + 'deg)';
+	this.canvas.style['-ms-transform'] = 'rotate(' + angle + 'deg)';
+	this.canvas.style['-webkit-transform'] = 'rotate(' + angle + 'deg)';
 	this.currentAngle = angle;
-	if (this.onSteerFunc)
+
+	raiseEvent = arguments.length > 1 ? raiseEvent : true;
+	if (raiseEvent && this.onSteerFunc)
 		this.onSteerFunc({
 			angle: angle < this.maxSteerAngle ? angle : -360 + angle
 		});
@@ -115,10 +118,12 @@ Wheel.prototype.dragstart = function (e) {
 	this.originToBegin = Vector.sub(this.dragPoint, this.rotationPoint);
 
 	// Only accept clicking/tapping inside the radius of the wheel
-	if (this.radius > 0 && this.originToBegin.mag() > this.radius)
+	const radius = this.imageCanvasRatio * this.canvas.clientHeight / 2;
+	if (this.originToBegin.mag() > radius)
 		return;
-	e.preventDefault();
+
 	this.dragging = true;
+	e.preventDefault();
 };
 
 Wheel.prototype.dragend = function (e) {
@@ -128,6 +133,7 @@ Wheel.prototype.dragend = function (e) {
 
 	this.desiredAngle = 0;
 	this.angle = this.currentAngle;
+	this.dragging = false;
 
 	const self = this;
 	const interval = setInterval(function () {
@@ -145,11 +151,10 @@ Wheel.prototype.dragend = function (e) {
 			return;
 		}
 
+		this.desiredAngle = angle;
 		self.angle = angle;
 		self.steer(angle);
 	}, 1000/60);
-
-	this.dragging = false;
 
 	if (DEBUG) {
 		DEBUG_CTX.clearRect(0, 0, DEBUG_CANVAS.width, DEBUG_CANVAS.height);
@@ -159,14 +164,15 @@ Wheel.prototype.dragend = function (e) {
 Wheel.prototype.dragmove = function (e) {
 	if (!this.dragging)
 		return;
-	e.preventDefault();
 
 	const current = new Vector(e.pageX, e.pageY);
 	const originToCurrent = Vector.sub(current, this.rotationPoint);
-	const angle = degrees(radiansPositive(Vector.angle(this.originToBegin, originToCurrent)));
+	var angle = degrees(radiansPositive(Vector.angle(this.originToBegin, originToCurrent)));
 
+	angle = (angle + this.angle) % 360;
 	if (angle > this.maxSteerAngle && angle < 360 - this.maxSteerAngle)
 		return;
+
 	this.steer(angle);
 
 	if (DEBUG) {
