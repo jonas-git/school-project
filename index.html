@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<title>Arduino</title>
+	<link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+<body style="margin: 0px">
+	<canvas id="debug-canvas"></canvas>
+	<div id="wheel-container"></div>
+	<script type="text/javascript" src="vector.js"></script>
+	<script type="text/javascript" src="wheel.js"></script>
+	<script type="text/javascript">
+		const wheel = new Wheel('./wheel.png', 360, 373, {
+			container: document.getElementById('wheel-container'),
+			onSteer: function (e) { console.log(e.angle) },
+			radius: 128
+		});
+	</script>
+</body>
+</html>
