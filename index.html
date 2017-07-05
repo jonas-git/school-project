@@ -1,16 +1,16 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Arduino</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link rel="stylesheet" type="text/css" href="./style.css">
 </head>
 <body style="margin: 0px">
-	<canvas id="debug-canvas"></canvas>
 	<script type="text/javascript" src="vector.js"></script>
-	<script type="text/javascript" src="wheel.js"></script>
+	<script type="text/javascript" src="wheel2.js"></script>
 	<script type="text/javascript">
 		const wheel = new Wheel('./wheel.png', 360, 373, {
-			onSteer: function (e) { /*console.log(e.angle)*/ }
+			onSteer: function (e) { console.log(e.angle) }
 		});
 	</script>
 </body>
