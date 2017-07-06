@@ -43,8 +43,8 @@ function Wheel(imageSource, axisX, axisY, options) {
 	this.container = options.container ? options.container : document.createElement('div');
 	this.canvas = document.createElement('canvas');
 	this.context = this.canvas.getContext('2d');
-	this.container.className = 'wheel';
-	this.canvas.className = 'wheel';
+	// this.container.className = 'wheel';
+	// this.canvas.className = 'wheel';
 
 	// Ensure that the wheel axis is in the center
 	// of the canvas, so that rotation is done properly.
@@ -83,6 +83,7 @@ function Wheel(imageSource, axisX, axisY, options) {
 	window.addEventListener('keyup', function (e) { self.keyup(e); }, false);
 
 	this.loop = setInterval(function () {
+		self.update();
 		if (self.device === Wheel.devices.keyboard || !self.lock && self.device !== Wheel.devices.mouse) {
 			// Steer slower if the current or the last device used was the keyboard.
 			const usesKeyboard = self.device === Wheel.devices.keyboard || self.lastDevice === Wheel.devices.keyboard;
