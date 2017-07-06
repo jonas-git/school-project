@@ -103,6 +103,11 @@ Wheel.devices = {
 	keyboard: 3
 };
 
+Wheel.prototype.restAt = function (angle) {
+	this.desiredAngle = angle;
+	this.restAngle = angle;
+};
+
 Wheel.prototype.steer = function (angle, raiseEvent) {
 	raiseEvent = arguments.length > 1 ? raiseEvent : true;
 	if (raiseEvent && this.onSteer) {
@@ -133,8 +138,8 @@ Wheel.prototype.draw = function () {
 };
 
 Wheel.prototype.update = function () {
-	this.canvas.style.marginLeft = -this.canvas.clientWidth / 2 + 'px';
-	this.canvas.style.marginTop = -this.canvas.clientHeight / 2 + 'px';
+	// this.canvas.style.marginLeft = -this.canvas.clientWidth / 2 + 'px';
+	// this.canvas.style.marginTop = -this.canvas.clientHeight / 2 + 'px';
 	const rect = this.canvas.getBoundingClientRect();
 	this.rotationPoint.x = rect.left + this.canvas.clientWidth / 2;
 	this.rotationPoint.y = rect.top + this.canvas.clientHeight / 2;
