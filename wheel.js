@@ -66,11 +66,11 @@ function Wheel(imageSource, axisX, axisY, options) {
 
 	// Once the document is loaded the state of the wheel can be updated,
 	// because it needs the `clientWidth` attribute of the canvas element.
-	document.addEventListener('DOMContentLoaded', function () { self.update(); });
+	// document.addEventListener('DOMContentLoaded', function () { self.update(); });
 
 	// Update the rotation point and the centering
 	// of the canvas when the window is resized.
-	window.addEventListener('resize', function () { self.update(); });
+	// window.addEventListener('resize', function () { self.update(); });
 
 	// Set the event listeners for mouse, touch and keyboard events.
 	window.addEventListener('mousedown', function (e) { self.dragstart(e); }, false);
