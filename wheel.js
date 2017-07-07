@@ -100,8 +100,7 @@ Wheel.prototype.lerpSpeedKeyboard = 0.06;
 Wheel.devices = {
 	none: 0,
 	mouse: 1,
-	touchscreen: 2,
-	keyboard: 3
+	keyboard: 2
 };
 
 Wheel.prototype.restAt = function (angle) {
@@ -164,6 +163,7 @@ Wheel.prototype.dragstart = function (e) {
 Wheel.prototype.dragmove = function (e) {
 	if (this.device !== Wheel.devices.mouse)
 		return;
+	e.preventDefault();
 
 	// Calculate the new angle of the wheel.
 	const current = new Vector(e.pageX, e.pageY);
@@ -178,6 +178,9 @@ Wheel.prototype.dragmove = function (e) {
 };
 
 Wheel.prototype.dragend = function (e) {
+	if (this.device === Wheel.devices.none)
+		return;
+	e.preventDefault();
 	this.lastDevice = this.device;
 	this.device = Wheel.devices.none;
 	this.desiredAngle = this.restAngle;
