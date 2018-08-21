@@ -1,2 +1,2 @@
-# school-project
-Repository for stuff I did in a school project.
+# projektwoche2017
+Ablage für Quelldateien eines Schulprojekts.
