@@ -1,2 +1,2 @@
 # school-project
-Repository for stuff I do in a school project.
+Repository for stuff I did in a school project.
